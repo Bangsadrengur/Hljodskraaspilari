@@ -1,0 +1,5 @@
+Hér verður hannaður einfaldur hljóðskráaspilari með python 2. 
+
+Hvað stendur til núna:
+1. Smíða forritsbút til að spila mp3 skrár.
+2. Smíða forritsbút sem les upplýsingar innihaldnar í mp3 skrá.
