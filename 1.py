@@ -6,15 +6,20 @@ import gtk
 import pyglet
 import glib
 
-class Scanfun:
-
-    #Global Breytur
+class soundPlayer:
     global file
     file = "sound.mp3"
     global player
     player = pyglet.media.Player()
+
+    def play_mus(self):
+        music = pyglet.resource.media(file)
+        music.play()
+        pyglet.app.run()
+
+class makeWindow:
     
-    
+
     #Foll
     def delete_event(self, widget, event, data=None):
         gtk.main_quit()
@@ -29,9 +34,8 @@ class Scanfun:
             print 'digit'
             
     def on_play(self, widget):      
-        music = pyglet.resource.media(file)
-        music.play()
-        pyglet.app.run()
+        sound_player = soundPlayer()
+        sound_player.play_mus()
            
     #PyGtk
     def __init__(self):
@@ -68,6 +72,6 @@ class Scanfun:
         gtk.main()
 
 if __name__ == "__main__":
-    fun = Scanfun()
-    fun.main()
+    win = makeWindow()
+    win.main()
 
