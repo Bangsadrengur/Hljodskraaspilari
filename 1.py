@@ -76,6 +76,8 @@ class makeWindow:
         
 
     def main(self):
+        #Enginn munur í keyrslu með eða án threads_init. Geymi það þar til hægt er að prufa mun með meiri virkni í forritinu sjálfu.
+        gtk.gdk.threads_init()
         gtk.main()
 
 if __name__ == "__main__":
