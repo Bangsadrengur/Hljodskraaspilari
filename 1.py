@@ -1,26 +1,34 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+import sys, os
 import pygtk
 pygtk.require('2.0')
 import gtk
-import pyglet
-import glib
+import pygst
+pygst.require('0.10')
+import gst
 
 class soundPlayer:
-    global file
-    file = "sound.mp3"
-    global player
-    player = pyglet.media.Player()
 
-    def play_mus(self):
-        music = pyglet.resource.media(file)
-        music.play()
-        pyglet.app.run()
+    def __init__(self):
+        self.player = gst.element_factory_make("playbin2", "player")
+        fakesink = gst.element_factory_make("fakesink", "fakesink")
+        self.player.set_property("video-sink", fakesink)
+
+    def start(self):
+        filepath = '/home/heimir/github/Hljodskraaspilari/sound.mp3'
+        if os.path.isfile(filepath):
+            self.player.set_property("uri", "file://" + filepath)
+            self.player.set_state(gst.STATE_PLAYING)
+        else: 
+            print "Skrá fannst ekki."
+
+    def stop(self):
+        self.player.set_state(gst.STATE_NULL)
 
 class makeWindow:
-    
 
-    #Foll
     def delete_event(self, widget, event, data=None):
         gtk.main_quit()
         return False
@@ -28,17 +36,17 @@ class makeWindow:
     def destroy(self, widget, data=None):
         gtk.main_quit()
     
-    def on_key_press(self, widget, event):
-        a = gtk.gdk.keyval_name(event.keyval).isdigit()
-        if a:
-            print 'digit'
-            
     def on_play(self, widget):      
-        sound_player = soundPlayer()
-        sound_player.play_mus()
-           
+        self.sound_player.start()
+
+    def on_stop(self,widget):
+        self.sound_player.stop()
+        
     #PyGtk
     def __init__(self):
+
+        self.sound_player = soundPlayer()
+
         #Widgets
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("delete_event", self.delete_event)
@@ -48,22 +56,21 @@ class makeWindow:
         self.vbox1 = gtk.VBox()
         self.hbox1 = gtk.HBox()
         
-        self.b_play = gtk.Button()
-        self.b_play.set_label('play')
-        self.b_pause = gtk.Button()
-        self.b_pause.set_label('pause')
+        #Buttons
+        self.b_play = gtk.Button('play')
+        self.b_stop = gtk.Button('stop')
         self.b_quit = gtk.Button("Loka forriti")
             
         #Events
-        self.window.connect("key-press-event",self.on_key_press)
-        self.b_play.connect("clicked",self.on_play)
+        self.b_play.connect("clicked", self.on_play)
+        self.b_stop.connect("clicked", self.on_stop)
         self.b_quit.connect_object("clicked", gtk.Widget.destroy, self.window)
             
         #adding and showing
         self.window.add(self.vbox1)
         self.vbox1.add(self.hbox1)
         self.hbox1.add(self.b_play)
-        self.hbox1.add(self.b_pause)
+        self.hbox1.add(self.b_stop)
         self.hbox1.add(self.b_quit)
         self.window.show_all()
         
