@@ -9,13 +9,18 @@ import pygst
 pygst.require('0.10')
 import gst
 
+# Notkun: sound_player = soundPlayer()
+# Eftir:  sound_player er hlutur sem meðhöndlar afspilun hljóðskráa.
 class soundPlayer:
 
     def __init__(self):
         self.player = gst.element_factory_make("playbin2", "player")
+        # Eftirfarandi tvær línur slökkva á hreyfimyndavirkni spilarans.
         fakesink = gst.element_factory_make("fakesink", "fakesink")
         self.player.set_property("video-sink", fakesink)
-
+    
+    # Notkun: x.start()
+    # Eftir:  Tilgreind skrá hefur verið gangsett eða villutexti er á aðalúttaki.
     def start(self):
         filepath = '/home/heimir/github/Hljodskraaspilari/sound.mp3'
         if os.path.isfile(filepath):
@@ -24,27 +29,37 @@ class soundPlayer:
         else: 
             print "Skrá fannst ekki."
 
+    # Notkun: x.stop()
+    # Eftir:  Engin spilun hljóðskráar er í gangi.
     def stop(self):
         self.player.set_state(gst.STATE_NULL)
 
+# Notkun: win = makeWindow()
+# Meðan:  Klasinn keyrir gluggaumhverfi fyrir hljóðskráaafspilara. Klasinn sér aðeins
+#           um gluggana og keyrslu umhverfis.
 class makeWindow:
 
+    # Meðhöndlar loknarköll frá gluggaumhverfi.
     def delete_event(self, widget, event, data=None):
         gtk.main_quit()
         return False
         
+    # Meðhöndlar köll í lokun forrits.
     def destroy(self, widget, data=None):
         gtk.main_quit()
     
+    # Kallar í fall afspilunarhlutar sem hefur afspilun.
     def on_play(self, widget):      
         self.sound_player.start()
 
+    # Kallar í fall afspilunarhlutar sem stöðvar afspilun.
     def on_stop(self,widget):
         self.sound_player.stop()
         
-    #PyGtk
+    # Smiður
     def __init__(self):
 
+        # Afspilunarhlutur smíðaður.
         self.sound_player = soundPlayer()
 
         #Widgets
@@ -53,6 +68,7 @@ class makeWindow:
         self.window.connect("destroy", self.destroy)
         self.window.set_border_width(10)
         
+        #Boxes
         self.vbox1 = gtk.VBox()
         self.hbox1 = gtk.HBox()
         
@@ -75,6 +91,7 @@ class makeWindow:
         self.window.show_all()
         
 
+    # Keyrslufall forrits.
     def main(self):
         #Enginn munur í keyrslu með eða án threads_init. Geymi það þar til hægt er að prufa mun með meiri virkni í forritinu sjálfu.
         gtk.gdk.threads_init()
