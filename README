@@ -3,3 +3,10 @@ Hér verður hannaður einfaldur hljóðskráaspilari með python 2.
 Hvað stendur til núna:
 1. Smíða forritsbút til að spila mp3 skrár.
 2. Smíða forritsbút sem les upplýsingar innihaldnar í mp3 skrá.
+
+Varðandi gstreamer og windows:
+Passa verður inntök í fall 'self.player.set_property()' í línu 26.  Seinna inntak þarf að fá 'file:///'
+þ.e.a.s. þrjú skástrik eftir 'file:' og slóð skráist með '/' milli möppustiga.
+Sækja með gstreamer fyrir win á slóð http://code.google.com/p/ossbuild/downloads/list . Passa að útgáfa
+0,10.7 sé sótt fyrir python 2.7 stuðning. Einnig þarf að sækja bæði venjulegan pakka og sdk pakka. 
+(prufað með GPL útgáfu en líklega er enginn munur.)
